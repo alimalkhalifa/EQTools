@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+node_modules/
+app/
+tmp/
+temp/
+crushbone*
