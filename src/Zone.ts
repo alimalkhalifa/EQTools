@@ -8,8 +8,9 @@ import World from './World';
 import BufferReader from './BufferReader';
 import * as Jimp from 'jimp';
 import createEverquestMaterial from './EverquestMaterial';
+import Destroyable from './Destroyable';
 
-export default class Zone {
+export default class Zone implements Destroyable {
   private geometry: Mesh;
   private materials: StandardMaterial[];
   private objects: PlaceableInterface[];
@@ -204,5 +205,10 @@ export default class Zone {
     for (let geo of geometry) {
       geo.dispose();
     }
+  }
+
+  destroy() {
+    this.spawns.destroyAll();
+    this.geometry.dispose();
   }
 }

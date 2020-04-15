@@ -92,6 +92,10 @@ export default class Spawns implements DatabaseListeners {
   }
 
   disconnectedFromDatabase() {
+    this.destroyAll();
+  }
+
+  destroyAll() {
     this.list.forEach(spawn => {
       spawn.destroy();
     });
