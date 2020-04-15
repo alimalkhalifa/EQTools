@@ -22,8 +22,10 @@ export default class Zone {
     ipcRenderer.on('load_objects', (event, scene) => this.loadObjects(scene));
     ipcRenderer.send('request_objects', scene.name);
 
-    this.spawns = new Spawns();
-    this.spawns.loadSpawns(scene.name.substr(0, scene.name.length - 4));
+    this.spawns = new Spawns(scene.name.substr(0, scene.name.length - 4));
+    if (World.main.getDatabaseConnection()) {
+      this.spawns.loadSpawns(scene.name.substr(0, scene.name.length - 4));
+    }
   }
 
   private async createZone(scene: SceneInterface) {

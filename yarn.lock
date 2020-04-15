@@ -366,6 +366,11 @@
     core-js "^3.4.1"
     regenerator-runtime "^0.13.3"
 
+"@patternfly/patternfly@^2.71.4":
+  version "2.71.4"
+  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-2.71.4.tgz#f2ceb3985132a9a8a99a7d958f631242dd915e1e"
+  integrity sha512-UdDX91uLOOZz9m072zq8m+rGJ4yoPTxuyhsW7iYoJmk+65Lvqnkr62oX9USX9JCqymNwh6qyw9lShKPppi6khw==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

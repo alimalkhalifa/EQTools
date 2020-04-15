@@ -6,7 +6,8 @@ import {
 import * as path from 'path';
 import ZoneFileLoader from './ZoneFileLoader';
 
-let mainWindow: Electron.BrowserWindow;
+let mainWindow: BrowserWindow;
+let openDatabaseModal: BrowserWindow;
 
 function openZone(): void {
   dialog.showOpenDialog({
@@ -26,8 +27,24 @@ function openZone(): void {
   });
 }
 
-function connectToDatabase(): void {
-
+function openConnectToDatabaseModal(): void {
+  openDatabaseModal = new BrowserWindow({
+    width: 400,
+    height: 400,
+    x: mainWindow.getPosition()[0] + mainWindow.getSize()[0] / 2.0 - 200,
+    y: mainWindow.getPosition()[1] + mainWindow.getSize()[1] / 2.0 - 200,
+    modal: true,
+    parent: mainWindow,
+    show: false,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  openDatabaseModal.loadFile(path.join(__dirname, "../openDatabaseModal.html"));
+  openDatabaseModal.on('ready-to-show', () => openDatabaseModal.show());
+  //openDatabaseModal.webContents.openDevTools();
+  mainWindow.blur();
 }
 
 function createWindow(): void {
@@ -80,8 +97,8 @@ function createWindow(): void {
           click: () => openZone(),
         },
         {
-          label: 'Connect to Database',
-          click: () => connectToDatabase(),
+          label: 'Open Connection to Database',
+          click: () => openConnectToDatabaseModal(),
         },
         {
           role: isMac ? 'close' : 'quit',
@@ -122,8 +139,35 @@ ipcMain.on('request_objects', (event, zone: string) => {
   });
 });
 
-ipcMain.on('request_spawns', (event, zone: string) => {
-  
+ipcMain.on('close_database_modal', (event, zone: string) => {
+  if (openDatabaseModal && !openDatabaseModal.isDestroyed()) {
+    openDatabaseModal.destroy();
+    mainWindow.focus();
+  }
+});
+
+ipcMain.on('test', (event, text: string) => {
+  console.log(text);
+});
+
+ipcMain.on('connect_database', (event, host, database, username, password) => {
+  mainWindow.webContents.send('connect_database', host, database, username, password);
+});
+
+ipcMain.on('connected_database', (event, success, message) => {
+  if (openDatabaseModal && !openDatabaseModal.isDestroyed()) openDatabaseModal.webContents.send('connected_database', success, message);
+});
+
+ipcMain.on('disconnect_database', () => {
+  mainWindow.webContents.send('disconnect_database')
+});
+
+ipcMain.on('database_modal_is_database_connected', () => {
+  mainWindow.webContents.send('is_database_connected');
+});
+
+ipcMain.on('is_database_connected_response', (event, connected) => {
+  if (openDatabaseModal && !openDatabaseModal.isDestroyed()) openDatabaseModal.webContents.send('is_database_connected_response', connected);
 });
 
 // In this file you can include the rest of your app"s specific main process

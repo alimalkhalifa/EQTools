@@ -3,8 +3,10 @@ import { Mesh, Vector3, PickingInfo, PointerEventTypes } from 'babylonjs';
 import World from "./World";
 import Clickable from "./Clickable";
 import Selectable from "./Selectable";
+import DatabaseListeners from "./DatabaseListener";
+import Destroyable from "./Destroyable";
 
-export class Spawn implements Clickable, Selectable {
+export class Spawn implements Clickable, Selectable, Destroyable {
   id!: number;
   spawngroupID!: number;
   zone!: number;
@@ -55,10 +57,20 @@ export class Spawn implements Clickable, Selectable {
 
   onSelect() {}
   onUnselect() {}
+
+  destroy() {
+    this.mesh.dispose();
+  }
 }
 
-export default class Spawns {
+export default class Spawns implements DatabaseListeners {
   private list: Spawn[];
+  private zone: string;
+
+  constructor(zone: string) {
+    this.zone = zone;
+    World.main.addToDatabaseListeners(this);
+  }
 
   async loadSpawns(zone: string) {
     this.list = [];
@@ -75,4 +87,14 @@ export default class Spawns {
     });
   }
 
+  loadFromDatabase() {
+    this.loadSpawns(this.zone);
+  }
+
+  disconnectedFromDatabase() {
+    this.list.forEach(spawn => {
+      spawn.destroy();
+    });
+    this.list = [];
+  }
 }

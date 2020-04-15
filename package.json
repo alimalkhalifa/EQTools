@@ -15,6 +15,7 @@
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "@patternfly/patternfly": "^2.71.4",
       "babylonjs": "^4.1.0",
       "jimp": "^0.10.1",
       "mariadb": "^2.3.1",

@@ -9,6 +9,7 @@ import { initSpawn2Model } from './models/Spawn2Model';
 import { Spawn } from './Spawns';
 import Clickable from './Clickable';
 import Selectable from './Selectable';
+import DatabaseListeners from './DatabaseListener';
 
 export default class World {
   private canvas: HTMLCanvasElement;
@@ -18,6 +19,7 @@ export default class World {
   private zone: Zone;
   private time: number;
   private sequelize: Sequelize;
+  private databaseToLoadListeners: DatabaseListeners[] = [];
 
   private static selection: Selectable;
 
@@ -31,17 +33,6 @@ export default class World {
     this.createScene(canvas, engine);
     this.createMaterials();
     this.hookupSelection();
-    this.sequelize = new Sequelize('peq', 'root', 'eqemu', {
-      host: 'localhost',
-      dialect: 'mariadb'
-    });
-
-    this.sequelize.authenticate().then(() => {
-      console.log("Connected to Database");
-      initSpawn2Model(this.sequelize);
-    }).catch(err => {
-      throw err;
-    });
 
     engine.runRenderLoop(() => {
       this.scene.render();
@@ -54,6 +45,32 @@ export default class World {
     ipcRenderer.on('load_zone', (event, scene) => {
       this.loadZone(scene);
     });
+
+    ipcRenderer.on('connect_database', (event, host, database, username, password) => {
+      this.sequelize?.close();
+      this.sequelize = new Sequelize(database, username, password, {
+        host: host,
+        dialect: 'mariadb'
+      });
+
+      this.sequelize.authenticate().then(() => {
+        console.log("Connected to Database");
+        ipcRenderer.send('connected_database', true);
+        initSpawn2Model(this.sequelize);
+        this.sendEventLoadFromDatabase();
+      }).catch(err => {
+        ipcRenderer.send('connected_database', false, err);
+      });
+    });
+
+    ipcRenderer.on('disconnect_database', () => {
+      this.sequelize.close();
+      this.sendEventDisconnectedFromDatabase();
+    });
+
+    ipcRenderer.on('is_database_connected', () => {
+      ipcRenderer.send('is_database_connected_response', this.sequelize ? true : false);
+    })
   }
 
   public getScene(): Scene {
@@ -104,5 +121,26 @@ export default class World {
 
   public static select(selectable: Selectable) {
     this.selection = selectable;
+  }
+
+  addToDatabaseListeners(node: DatabaseListeners) {
+    this.databaseToLoadListeners.push(node);
+  }
+
+  removeFromDatabaseListeners(node: DatabaseListeners) {
+    let index = this.databaseToLoadListeners.indexOf(node);
+    this.databaseToLoadListeners.splice(index, 1);
+  }
+
+  sendEventLoadFromDatabase() {
+    this.databaseToLoadListeners.forEach(listener => {
+      listener.loadFromDatabase()
+    });
+  }
+
+  sendEventDisconnectedFromDatabase() {
+    this.databaseToLoadListeners.forEach(listener => {
+      listener.disconnectedFromDatabase()
+    });
   }
 }
