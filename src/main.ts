@@ -41,7 +41,7 @@ function openDatabaseModal(): void {
       nodeIntegration: true
     }
   });
-  databaseModal.loadFile(path.join(__dirname, "../openDatabaseModal.html"));
+  databaseModal.loadFile(path.join(__dirname, "../databaseModal.html"));
   databaseModal.on('ready-to-show', () => databaseModal.show());
   //openDatabaseModal.webContents.openDevTools();
   mainWindow.blur();
