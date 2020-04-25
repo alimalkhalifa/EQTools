@@ -150,8 +150,8 @@ ipcMain.on('test', (event, text: string) => {
   console.log(text);
 });
 
-ipcMain.on('connect_database', (event, host, database, username, password) => {
-  mainWindow.webContents.send('connect_database', host, database, username, password);
+ipcMain.on('connect_database', (event, host, port, database, username, password) => {
+  mainWindow.webContents.send('connect_database', host, port, database, username, password);
 });
 
 ipcMain.on('connected_database', (event, success, message) => {

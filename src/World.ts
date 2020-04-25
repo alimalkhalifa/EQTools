@@ -46,10 +46,11 @@ export default class World {
       this.loadZone(scene);
     });
 
-    ipcRenderer.on('connect_database', (event, host, database, username, password) => {
+    ipcRenderer.on('connect_database', (event, host, port, database, username, password) => {
       this.sequelize?.close();
       this.sequelize = new Sequelize(database, username, password, {
         host: host,
+        port: port,
         dialect: 'mariadb'
       });
 

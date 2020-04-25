@@ -8,6 +8,7 @@ document.addEventListener("keydown", (ev) => {
 
 interface Data {
   host: string,
+  port: string,
   database: string,
   username: string,
   password: string,
@@ -18,6 +19,7 @@ let storageData = JSON.parse(localStorage.getItem("databaseConnectFormData")) as
 
 let formData: Data = {
   host: storageData?.host || "localhost",
+  port: storageData?.port || "3306",
   database: storageData?.database || "peq",
   username: storageData?.username || "root",
   password: storageData?.password || "peq",
@@ -26,6 +28,7 @@ let formData: Data = {
 
 let form = document.getElementById('form');
 let hostInput = document.getElementById('host') as HTMLInputElement;
+let portInput = document.getElementById('port') as HTMLInputElement;
 let databaseInput = document.getElementById('database') as HTMLInputElement;
 let usernameInput = document.getElementById('username') as HTMLInputElement;
 let passwordInput = document.getElementById('password') as HTMLInputElement;
@@ -37,6 +40,7 @@ form.addEventListener('submit', ev => submitForm(ev, false));
 connectButton.addEventListener('click', ev => submitForm(ev, true));
 closeButton.addEventListener('click', () => ipcRenderer.send('close_database_modal'));
 hostInput.addEventListener('input', ev => changeFormData(ev, "host", hostInput));
+portInput.addEventListener('input', ev => changeFormData(ev, "port", portInput));
 databaseInput.addEventListener('input', ev => changeFormData(ev, "database", databaseInput));
 usernameInput.addEventListener('input', ev => changeFormData(ev, "username", usernameInput));
 passwordInput.addEventListener('input', ev => changeFormData(ev, "password", passwordInput));
@@ -60,10 +64,11 @@ function submitForm(ev: Event, canDisconnect: boolean) {
     connectButton.disabled = true;
     closeButton.disabled = true;
     hostInput.disabled = true;
+    portInput.disabled = true;
     databaseInput.disabled = true;
     usernameInput.disabled = true;
     passwordInput.disabled = true
-    ipcRenderer.send('connect_database', formData.host, formData.database, formData.username, formData.password);
+    ipcRenderer.send('connect_database', formData.host, formData.port, formData.database, formData.username, formData.password);
   }
 }
 
@@ -82,6 +87,7 @@ function setFormData(data: Data) {
 
 function updateView() {
   hostInput.value = formData.host;
+  portInput.value = formData.port;
   databaseInput.value = formData.database;
   usernameInput.value = formData.username;
   passwordInput.value = formData.password;
@@ -89,12 +95,14 @@ function updateView() {
   if (formData.connected) {
     connectButton.innerHTML = "Disconnect";
     hostInput.disabled = true;
+    portInput.disabled = true;
     databaseInput.disabled = true;
     usernameInput.disabled = true;
     passwordInput.disabled = true
   }
   else {
     hostInput.disabled = false;
+    portInput.disabled = false;
     databaseInput.disabled = false;
     usernameInput.disabled = false;
     passwordInput.disabled = false
