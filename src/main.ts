@@ -8,6 +8,7 @@ import ZoneFileLoader from './ZoneFileLoader';
 
 let mainWindow: BrowserWindow;
 let databaseModal: BrowserWindow;
+let cwd: string;
 
 function openZone(): void {
   dialog.showOpenDialog({
@@ -22,6 +23,7 @@ function openZone(): void {
     if (files.canceled) return;
 
     const scene = await ZoneFileLoader.load(files.filePaths[0]);
+    cwd = path.dirname(files.filePaths[0]);
 
     mainWindow.webContents.send('load_zone', scene);
   });
@@ -134,7 +136,7 @@ app.on('activate', () => {
 });
 
 ipcMain.on('request_objects', (event, zone: string) => {
-  ZoneFileLoader.load(path.join(process.cwd(), `${zone.slice(0, zone.length - 4)}_obj.s3d`)).then((scene) => {
+  ZoneFileLoader.load(path.join(cwd, `${zone.slice(0, zone.length - 4)}_obj.s3d`)).then((scene) => {
     mainWindow.webContents.send('load_objects', scene);
   });
 });

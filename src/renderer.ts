@@ -14,3 +14,7 @@ ipcRenderer.on('load_zone', (event, scene: SceneInterface) => {
   canvasOverlay.style.visibility = "visible";
   setTimeout(() => world.LoadZone(scene), 3 * 1000);
 })
+
+ipcRenderer.on('log', (event, text: string) => {
+  console.log(text);
+})

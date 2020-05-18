@@ -1,8 +1,9 @@
 {
-   "name": "eqtools",
-   "version": "1.0.0",
-   "description": "",
-   "main": "index.js",
+   "name": "visual-eq",
+   "productName": "Visual EQ",
+   "version": "0.0.1",
+   "description": "Visual EQ",
+   "main": "app/main.js",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "build": "tsc",
@@ -10,10 +11,14 @@
       "build:start": "yarn build && yarn start",
       "dev": "nodemon -w src/ --ext ts,js,json --exec yarn -- build:start",
       "lint": "eslint . --ext .js,.jsx,.ts,.tsx || true",
-      "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.html --fix || true"
+      "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.html --fix || true",
+      "pack": "electron-builder --dir",
+      "dist": "electron-builder",
+      "postinstall": "electron-builder install-app-deps"
    },
-   "author": "",
-   "license": "ISC",
+   "author": "Ali Al-Khalifa <am.alkhalifa@gmail.com>",
+   "copyright": "Copyright © 2020 Ali Al-Khalifa",
+   "license": "MIT",
    "dependencies": {
       "@patternfly/patternfly": "^2.71.4",
       "babylonjs": "^4.1.0",
@@ -21,8 +26,7 @@
       "mariadb": "^2.3.1",
       "pako": "^1.0.11",
       "reflect-metadata": "^0.1.10",
-      "sequelize": "^5.21.6",
-      "source-map-support": "^0.5.16"
+      "sequelize": "^5.21.6"
    },
    "devDependencies": {
       "@types/node": "^12",
@@ -31,11 +35,19 @@
       "@typescript-eslint/eslint-plugin": "^2.25.0",
       "@typescript-eslint/parser": "^2.25.0",
       "electron": "^8.2.0",
+      "electron-builder": "^22.6.0",
       "eslint": "^6.8.0",
       "eslint-config-airbnb-typescript": "^7.2.0",
       "eslint-plugin-import": "^2.20.1",
       "ts-node": "8.8.2",
       "typescript": "3.8.3",
       "typescript-eslint": "0.0.1-alpha.0"
-   }
+   },
+   "build": {
+      "appId": "io.eqemu.eqtools.visualeq",
+      "asar": false,
+      "mac": {
+        "category": "io.eqemu.eqtools.visualeq"
+      }
+    }
 }
