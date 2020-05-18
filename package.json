@@ -14,6 +14,7 @@
       "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.html --fix || true",
       "pack": "electron-builder --dir",
       "dist": "electron-builder",
+      "build:dist": "yarn build && yarn dist",
       "postinstall": "electron-builder install-app-deps"
    },
    "author": "Ali Al-Khalifa <am.alkhalifa@gmail.com>",
@@ -45,7 +46,6 @@
    },
    "build": {
       "appId": "io.eqemu.eqtools.visualeq",
-      "asar": false,
       "mac": {
         "category": "io.eqemu.eqtools.visualeq"
       }
