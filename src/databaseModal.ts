@@ -12,7 +12,8 @@ interface Data {
   database: string,
   username: string,
   password: string,
-  connected: boolean
+  connected: boolean,
+  err?: string
 }
 
 let storageData = JSON.parse(localStorage.getItem("databaseConnectFormData")) as Data;
@@ -107,7 +108,11 @@ function updateView() {
     usernameInput.disabled = false;
     passwordInput.disabled = false
     connectButton.innerHTML = "Connect";
-    databaseStatus.innerHTML = 'Not connected to Database';
+    if (formData.err) {
+      databaseStatus.innerHTML = formData.err;
+    } else {
+      databaseStatus.innerHTML = 'Not connected to Database';
+    }
   }
   connectButton.style.width = `${width}px`;
 }
@@ -117,13 +122,11 @@ function saveFormData() {
 }
 
 function updateStatus(success: boolean, message?: string) {
+  if (formData.err) delete formData.err;
   if (success) databaseStatus.innerHTML = `<b class="success">Successfully</b> connected to database`;
-  else {
-    databaseStatus.innerHTML = `<b class="failure">Failed</b> to connect to database with message<br />${message}`;
-  }
   closeButton.disabled = false;
   connectButton.disabled = false;
-  setFormData(Object.assign({}, formData, { connected: success }));
+  setFormData(Object.assign({}, formData, { connected: success, ...( message ? { err: `<b class="failure">Failed</b> to connect to database with message<br />${message}` } : {} ) }));
   updateView();
 }
 

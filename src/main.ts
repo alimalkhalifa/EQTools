@@ -32,7 +32,7 @@ function openZone(): void {
 function openDatabaseModal(): void {
   databaseModal = new BrowserWindow({
     width: 400,
-    height: 400,
+    height: 550,
     x: mainWindow.getPosition()[0] + mainWindow.getSize()[0] / 2.0 - 200,
     y: mainWindow.getPosition()[1] + mainWindow.getSize()[1] / 2.0 - 200,
     modal: true,
