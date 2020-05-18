@@ -55,10 +55,10 @@ function createWindow(): void {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: displayArea.width * 0.8,
-    height: displayArea.height * 0.8,
-    x: displayArea.x + displayArea.width * 0.1,
-    y: displayArea.y + displayArea.height * 0.1,
+    width: displayArea.width,
+    height: displayArea.height,
+    x: displayArea.x,
+    y: displayArea.y,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -79,11 +79,11 @@ function createWindow(): void {
   });
 
   // DEBUG
-  mainWindow.webContents.on('dom-ready', () => {
+  /*mainWindow.webContents.on('dom-ready', () => {
     ZoneFileLoader.load('C:\\Users\\amalk\\Documents\\Projects\\EQTools\\crushbone.s3d').then((scene) => {
       mainWindow.webContents.send('load_zone', scene);
     });
-  });
+  });*/
   // END DEBUG
 
   const isMac = process.platform === 'darwin';

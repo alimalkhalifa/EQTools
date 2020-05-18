@@ -10,7 +10,7 @@
       "build:start": "yarn build && yarn start",
       "dev": "nodemon -w src/ --ext ts,js,json --exec yarn -- build:start",
       "lint": "eslint . --ext .js,.jsx,.ts,.tsx || true",
-      "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix || true"
+      "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.html --fix || true"
    },
    "author": "",
    "license": "ISC",

@@ -75,13 +75,24 @@ let Schema: ModelAttributes = {
   animation: {
     type: INTEGER,
     allowNull: false
+  },
+
+  min_expansion: {
+    type: INTEGER,
+    allowNull: false
+  },
+
+  max_expansion: {
+    type: INTEGER,
+    allowNull: false
   }
 }
 
 export default class Spawn2Model extends Model {
+  [key: string]: any;
   id!: number;
   spawngroupID!: number;
-  zone!: number;
+  zone!: string;
   version!: number;
   x!: number;
   y!: number;
@@ -94,6 +105,8 @@ export default class Spawn2Model extends Model {
   cond_value!: number;
   enabled!: number;
   animation!: number;
+  min_expansion!: number;
+  max_expansion!: number;
 };
 
 export function initSpawn2Model(connection: Sequelize) {
