@@ -1,8 +1,8 @@
 {
    "name": "visual-eq",
-   "productName": "Visual EQ",
-   "version": "0.0.1",
-   "description": "Visual EQ",
+   "productName": "VisualEQ",
+   "version": "0.0.2",
+   "description": "VisualEQ",
    "main": "app/main.js",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,6 +23,7 @@
    "dependencies": {
       "@patternfly/patternfly": "^2.71.4",
       "babylonjs": "^4.1.0",
+      "dotenv": "^8.2.0",
       "jimp": "^0.10.1",
       "mariadb": "^2.3.1",
       "pako": "^1.0.11",
@@ -47,7 +48,7 @@
    "build": {
       "appId": "io.eqemu.eqtools.visualeq",
       "mac": {
-        "category": "io.eqemu.eqtools.visualeq"
+         "category": "io.eqemu.eqtools.visualeq"
       }
-    }
+   }
 }

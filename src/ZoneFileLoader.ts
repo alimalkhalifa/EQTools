@@ -13,7 +13,6 @@ import S3DFile from './S3DFile';
 
 export default class ZoneFileLoader {
   public static async load(file_path: string): Promise<SceneInterface> {
-    console.log(file_path)
     try {
       return await new Promise<SceneInterface>((resolve, reject) => fs.readFile(file_path, (err, data) => {
         if (err) reject(new Error('Error reading zone file'));

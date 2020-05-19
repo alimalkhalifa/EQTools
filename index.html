@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Babylon JS Electron App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VisualEQ</title>
+    <script defer src="external/font-awesome/js/all.min.js"></script>
     <style>
         html,
         body {
@@ -61,6 +63,8 @@
             flex-direction: column;
             background: #222;
             border-top: 2px white solid;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
         .grid-item__footer {
             grid-area: footer;
@@ -80,6 +84,7 @@
             margin-top: 8px;
             margin-left: 8px;
             margin-right: 8px;
+            font-size: 8;
         }
         .inspector__widget--title {
             background: #444;
@@ -109,7 +114,7 @@
         </div>
         <div class="grid-item__footer">
             <div>&copy; 2020 EQEmulator</div>
-            <div>Wiki | Help</div>
+            <div>Wiki | Help </div>
         </div>
     </div>
     <script>

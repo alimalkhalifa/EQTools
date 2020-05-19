@@ -1,5 +1,7 @@
 /* eslint global-require: "off" */
 
+require('dotenv').config();
+
 import {
   app, BrowserWindow, Menu, MenuItem, dialog, ipcMain,
 } from 'electron';
@@ -70,7 +72,7 @@ function createWindow(): void {
   mainWindow.loadFile(path.join(__dirname, '../index.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (process.env.NODE_ENV === "dev") mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -81,11 +83,23 @@ function createWindow(): void {
   });
 
   // DEBUG
-  /*mainWindow.webContents.on('dom-ready', () => {
-    ZoneFileLoader.load('C:\\Users\\amalk\\Documents\\Projects\\EQTools\\crushbone.s3d').then((scene) => {
+  if (process.env.NODE_ENV === "dev") {
+    mainWindow.webContents.on('dom-ready', async () => {
+      mainWindow.webContents.send(
+        'connect_database',
+        process.env.DB_HOST,
+        process.env.DB_PORT,
+        process.env.DB_DATABASE,
+        process.env.DB_USERNAME,
+        process.env.DB_PASSWORD
+      );
+      const zoneFile = process.env.ZONE_FILE;
+      const scene = await ZoneFileLoader.load(zoneFile);
+      cwd = path.dirname(zoneFile);
+
       mainWindow.webContents.send('load_zone', scene);
     });
-  });*/
+  }
   // END DEBUG
 
   const isMac = process.platform === 'darwin';
@@ -146,10 +160,6 @@ ipcMain.on('close_database_modal', (event, zone: string) => {
     databaseModal.destroy();
     mainWindow.focus();
   }
-});
-
-ipcMain.on('test', (event, text: string) => {
-  console.log(text);
 });
 
 ipcMain.on('connect_database', (event, host, port, database, username, password) => {

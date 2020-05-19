@@ -9,9 +9,9 @@ import IdWidgetInterface from "./inspectorInterfaces/IdWidgetInterface";
 import InspectorWidgetFactory from "./inspectorWidgetFactories/InspectorWidgetFactory";
 import DataWidgetInterface from "./inspectorInterfaces/DataWidgetInterface";
 import PositionWidgetInterface from "./inspectorInterfaces/PositionWidgetInterface";
-import DataFieldOptionsInterface from "./inspectorInterfaces/DataFieldOptionsInterface";
 import CommitWidgetInterface from "./inspectorInterfaces/CommitWidgetInterface";
 import SpawngroupModel from "./models/SpawngroupModel";
+import DataFieldFactory from "./inspectorWidgetFactories/DataFieldFactory"
 
 export class Spawn implements Clickable, Selectable, Disposable, IdWidgetInterface, DataWidgetInterface, PositionWidgetInterface, CommitWidgetInterface {
   private spawn2: Spawn2Model;
@@ -86,6 +86,9 @@ export class Spawn implements Clickable, Selectable, Disposable, IdWidgetInterfa
     input.style.flex = '1';
     input.style.height = '22px';
     input.style.marginRight = '14px';
+    input.style.background = "#222";
+    input.style.borderColor = "#222";
+    input.style.color = "#888";
     input.disabled = true;
     input.value = this.spawn2.id.toString();
 
@@ -103,10 +106,10 @@ export class Spawn implements Clickable, Selectable, Disposable, IdWidgetInterfa
     div.style.alignItems = 'center';
     div.className = 'inspector__widget';
 
-    div.append(this.CreateDataField("x", this.spawn2.x.toString(), "X", { type: 'number', rangeOptions: { step: '0.1' } }, (fieldName, value) => this.UpdateSpawn2Position(parseFloat(value), this.spawn2.y, this.spawn2.z)));
-    div.append(this.CreateDataField("y", this.spawn2.y.toString(), "Y", { type: 'number', rangeOptions: { step: '0.1' } }, (fieldName, value) => this.UpdateSpawn2Position(this.spawn2.x, parseFloat(value), this.spawn2.z)));
-    div.append(this.CreateDataField("z", this.spawn2.z.toString(), "Z", { type: 'number', rangeOptions: { step: '0.1' } }, (fieldName, value) => this.UpdateSpawn2Position(this.spawn2.x, this.spawn2.y, parseFloat(value))));
-    div.append(this.CreateDataField("heading", this.spawn2.heading.toString(), "Heading", { type: 'range', rangeOptions: { min: "0", max: "360", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("x", this.spawn2.x.toString(), "X", { type: 'numberMultiIncrement', rangeOptions: { step: '0.1' } }, (fieldName, value) => this.UpdateSpawn2Position(parseFloat(value), this.spawn2.y, this.spawn2.z)));
+    div.append(DataFieldFactory("y", this.spawn2.y.toString(), "Y", { type: 'numberMultiIncrement', rangeOptions: { step: '0.1' } }, (fieldName, value) => this.UpdateSpawn2Position(this.spawn2.x, parseFloat(value), this.spawn2.z)));
+    div.append(DataFieldFactory("z", this.spawn2.z.toString(), "Z", { type: 'numberMultiIncrement', rangeOptions: { step: '0.1' } }, (fieldName, value) => this.UpdateSpawn2Position(this.spawn2.x, this.spawn2.y, parseFloat(value))));
+    div.append(DataFieldFactory("heading", this.spawn2.heading.toString(), "Heading", { type: 'range', rangeOptions: { min: "0", max: "360", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
 
     return div;
   }
@@ -118,17 +121,17 @@ export class Spawn implements Clickable, Selectable, Disposable, IdWidgetInterfa
     div.style.alignItems = 'center';
     div.className = 'inspector__widget';
 
-    div.append(this.CreateDataField("zone", this.spawn2.zone, "Zone", null, (fieldName, value) => this.UpdateSpawn2(fieldName, value), true));
-    div.append(this.CreateDataField("version", this.spawn2.version.toString(), "Version", { type: 'range', rangeOptions: { min: "0", max: "20", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("respawntime", this.spawn2.respawntime.toString(), "Respawn Time", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("variance", this.spawn2.variance.toString(), "Variance", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("pathgrid", this.spawn2.pathgrid.toString(), "Path Grid", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("_condition", this.spawn2._condition.toString(), "Condition", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("cond_value", this.spawn2.cond_value.toString(), "Condition Value", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("enabled", this.spawn2.enabled.toString(), "Enabled", { type: 'checkbox' }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("animation", this.spawn2.animation.toString(), "Animation", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("min_expansion", this.spawn2.min_expansion.toString(), "Min Expansion", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
-    div.append(this.CreateDataField("max_expansion", this.spawn2.max_expansion.toString(), "Max Expansion", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("zone", this.spawn2.zone, "Zone", null, (fieldName, value) => this.UpdateSpawn2(fieldName, value), true));
+    div.append(DataFieldFactory("version", this.spawn2.version.toString(), "Version", { type: 'range', rangeOptions: { min: "0", max: "20", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("respawntime", this.spawn2.respawntime.toString(), "Respawn Time", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("variance", this.spawn2.variance.toString(), "Variance", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("pathgrid", this.spawn2.pathgrid.toString(), "Path Grid", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("_condition", this.spawn2._condition.toString(), "Condition", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("cond_value", this.spawn2.cond_value.toString(), "Condition Value", { type: 'number', rangeOptions: { min: '0', step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("enabled", this.spawn2.enabled.toString(), "Enabled", { type: 'checkbox' }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("animation", this.spawn2.animation.toString(), "Animation", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("min_expansion", this.spawn2.min_expansion.toString(), "Min Expansion", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("max_expansion", this.spawn2.max_expansion.toString(), "Max Expansion", { type: 'number', rangeOptions: { min: "0", step: '1' } }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
 
     return div;
   }
@@ -197,61 +200,14 @@ export class Spawn implements Clickable, Selectable, Disposable, IdWidgetInterfa
   CreateSpawngroupEditWidget() {
     let div = document.createElement('div');
 
-    div.append(this.CreateDataField("spawngroupID", this.spawn2.spawngroupID.toString(), "Spawn Group ID", { type: "number", rangeOptions: { min: '0'} }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
+    div.append(DataFieldFactory("spawngroupID", this.spawn2.spawngroupID.toString(), "Spawn Group ID", { type: "number", rangeOptions: { min: '0'} }, (fieldName, value) => this.UpdateSpawn2(fieldName, parseInt(value))));
     div.append(this.CreateHorizontalRule());
-    div.append(this.CreateDataField("name", this.spawngroup.name, "Name", null, null));
+    div.append(DataFieldFactory("name", this.spawngroup.name, "Name", null, null));
 
     return div;
   }
 
-  CreateDataField(id: string, data: string, label: string, fieldOptions: DataFieldOptionsInterface, change: (fieldName: string, value: string) => void, disabled: boolean = false): HTMLDivElement {
-    let div = document.createElement('div');
-    div.style.display = 'flex';
-    div.style.flexDirection = 'row';
-    div.style.alignItems = 'center';
-    div.style.width = '100%';
-    div.style.marginTop = '2px';
-
-    let labelElem = document.createElement('label');
-    labelElem.style.width = '120px';
-    labelElem.style.paddingLeft = '4px';
-    labelElem.innerText = label;
-
-    let input = document.createElement('input');
-    input.type = fieldOptions?.type || 'text';
-    input.min = fieldOptions?.rangeOptions?.min;
-    input.max = fieldOptions?.rangeOptions?.max;
-    input.step = fieldOptions?.rangeOptions?.step;
-    input.id = `inspector__${id}`;
-    input.value = `${data}`;
-    if (fieldOptions?.type === "checkbox") input.checked = parseInt(data) !== 0;
-    input.style.flex = '1';
-    input.style.height = '22px';
-    input.style.marginLeft = '14px';
-    input.style.marginRight = '14px';
-    input.disabled = disabled;
-
-    let value = document.createElement('div');
-    if (fieldOptions?.type === "range") {
-      value.style.marginLeft = '14px';
-      value.innerText = input.value;
-      input.addEventListener('input', function() {
-        value.innerText = this.value;
-      });
-    }
-
-    if (change) {
-      input.addEventListener('change', function() {
-        change(id, fieldOptions?.type === "checkbox" ? (this.checked ? '1' : '0') : this.value);
-      });
-    }
-
-    div.append(labelElem);
-    if (fieldOptions?.type === "range") div.append(value);
-    div.append(input);
-
-    return div;
-  }
+  
 
   CreateHorizontalRule() {
     let hr = document.createElement('hr');
